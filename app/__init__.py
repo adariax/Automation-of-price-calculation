@@ -12,15 +12,16 @@ db = SQLAlchemy(app)
 
 from app import models
 
+db.create_all()
 
 def get_db_session() -> db.Session:
     return db.session
 
 login_manager = LoginManager(app)
 
-from app.data import posts_api, users_api, posts_callback
+# from app.data import posts_api, users_api, posts_callback
 
-api = Api(app)
+# api = Api(app)
 # api.add_resource(users_api.UsersResource, '')
 
 # app.register_blueprint(users_api.blueprint)
