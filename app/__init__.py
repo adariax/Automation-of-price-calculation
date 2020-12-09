@@ -18,7 +18,9 @@ def get_db_session() -> db.Session:
     return db.session
 
 
-from app.api import material
+api = Api(app)  # TODO: check user's possibility to change data
 
-api = Api(app)
+from app.api_resources import material, materials
+
 api.add_resource(material.MaterialResource, '/api/material/<int:m_id>')
+api.add_resource(materials.MaterialsResource, '/api/materials')
