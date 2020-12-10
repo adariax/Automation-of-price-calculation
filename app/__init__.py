@@ -24,3 +24,8 @@ from app.api_resources import material, materials
 
 api.add_resource(material.MaterialResource, '/api/material/<int:m_id>')
 api.add_resource(materials.MaterialsResource, '/api/materials')
+
+from app.api_resources import worker, workers
+
+api.add_resource(worker.WorkerResource, '/api/worker/<int:m_id>')
+api.add_resource(workers.WorkersResource, '/api/workers')

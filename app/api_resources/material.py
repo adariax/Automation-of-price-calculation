@@ -1,4 +1,3 @@
-  
 from flask import jsonify, make_response
 from flask_restful import Resource, reqparse
 
@@ -59,7 +58,7 @@ class MaterialResource(Resource):
         if not material:
             return make_response(jsonify({'result': {'material': 'not found'}}), 404)
         
-        args = MaterialResource.post_parser.parse_args()
+        args = MaterialResource.put_parser.parse_args()
         for key, value in args.items():
             if value is not None:
                 material.__setattr__(key, value)
