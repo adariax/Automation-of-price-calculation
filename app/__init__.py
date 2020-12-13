@@ -27,5 +27,10 @@ api.add_resource(materials.MaterialsResource, '/api/materials')
 
 from app.api_resources import worker, workers
 
-api.add_resource(worker.WorkerResource, '/api/worker/<int:m_id>')
+api.add_resource(worker.WorkerResource, '/api/worker/<int:w_id>')
 api.add_resource(workers.WorkersResource, '/api/workers')
+
+from app.api_resources import machine, machines
+
+api.add_resource(machine.MachineResource, '/api/machine/<int:m_id>')
+api.add_resource(machines.MachinesResource, '/api/machines')

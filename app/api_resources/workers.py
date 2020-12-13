@@ -18,21 +18,22 @@ class WorkersResource(Resource):
 
         session = get_db_session()
         if args['ids'] == 'all':
-            return make_response(jsonify(
-                {'result': {'workers': [worker.to_dict() 
+            return make_response(jsonify({'result': {'workers': 
+                [worker.to_dict(only=('id', 'title', 'price', 'machines.id', 'machines.title')) 
                 for worker in session.query(Worker).all()]}}
                 ), 200)
 
         workers = []
-        for m_id in ids:
-            worker = session.query(Worker).filter(Worker.id == m_id).first()
+        for w_id in ids:
+            worker = session.query(Worker).filter(Worker.id == w_id).first()
             if worker:
                 workers.append(worker)
         if not workers:
             return make_response(jsonify({'result': {'workers': 'not found'}}), 404)
 
-        return make_response(jsonify(
-            {'result': {'workers': [worker.to_dict() for worker in workers]}}), 200)
+        return make_response(jsonify({'result': {'workers': 
+            [worker.to_dict(only=('id', 'title', 'price', 'machines.id', 'machines.title')) 
+            for worker in workers]}}), 200)
 
     def delete(self):
         args = WorkersResource.parser.parse_args()
@@ -42,8 +43,8 @@ class WorkersResource(Resource):
             return make_response(jsonify({'result': {'error': 'wrong ids'}}), 400)
 
         session = get_db_session()
-        for m_id in ids:
-            worker = session.query(Worker).filter(Worker.id == m_id).first()
+        for w_id in ids:
+            worker = session.query(Worker).filter(Worker.id == w_id).first()
             if worker:
                 session.delete(worker)
 

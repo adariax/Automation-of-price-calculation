@@ -13,18 +13,20 @@ class WorkerResource(Resource):
     put_parser.add_argument('title', required=False)
     put_parser.add_argument('price', required=False, type=float)
 
-    def get(self, m_id):
+    def get(self, w_id):
         session = get_db_session()
-        worker = session.query(Worker).filter(Worker.id == m_id).first()
+        worker = session.query(Worker).filter(Worker.id == w_id).first()
 
         if not worker:
             return make_response(jsonify({'result': {'worker': 'not found'}}), 404)
 
-        return make_response(jsonify({'result': {'worker': worker.to_dict()}}), 200)
+        return make_response(jsonify({'result': {'worker': 
+                             worker.to_dict(only=('id', 'title', 'price', 
+                             'machines.id', 'machines.title'))}}), 200)
 
-    def delete(self, m_id):
+    def delete(self, w_id):
         session = get_db_session()
-        worker = session.query(Worker).filter(Worker.id == m_id).first()
+        worker = session.query(Worker).filter(Worker.id == w_id).first()
 
         if not worker:
             return make_response(jsonify({'result': {'worker': 'not found'}}), 404)
@@ -33,8 +35,8 @@ class WorkerResource(Resource):
         session.commit()
         return make_response(jsonify({'result': {'success': 'OK'}}), 200)
     
-    def post(self, m_id):
-        if m_id != 0:
+    def post(self, w_id):
+        if w_id != 0:
             return make_response(jsonify({'result': {'error': 'wrong id'}}), 400)
 
         args = WorkerResource.post_parser.parse_args()
@@ -48,9 +50,9 @@ class WorkerResource(Resource):
         session.commit()
         return make_response(jsonify({'result': {'success': 'OK'}}), 200)
     
-    def put(self, m_id):
+    def put(self, w_id):
         session = get_db_session()
-        worker = session.query(Worker).filter(Worker.id == m_id).first()
+        worker = session.query(Worker).filter(Worker.id == w_id).first()
 
         if not worker:
             return make_response(jsonify({'result': {'worker': 'not found'}}), 404)
