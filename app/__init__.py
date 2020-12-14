@@ -34,3 +34,8 @@ from app.api_resources import machine, machines
 
 api.add_resource(machine.MachineResource, '/api/machine/<int:m_id>')
 api.add_resource(machines.MachinesResource, '/api/machines')
+
+from app.api_resources import operation, operations
+
+api.add_resource(operation.OperationResource, '/api/operation/<int:o_id>')
+api.add_resource(operations.OperationsResource, '/api/operations')

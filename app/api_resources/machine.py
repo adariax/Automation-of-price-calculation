@@ -23,7 +23,8 @@ class MachineResource(Resource):
             return make_response(jsonify({'result': {'machine': 'not found'}}), 404)
 
         return make_response(jsonify({'result': {'machine': 
-                             machine.to_dict(only=('id', 'title', 'price'))}}), 200)
+                             machine.to_dict(only=('id', 'title', 'price', 
+                             'worker.id', 'worker.title'))}}), 200)
 
     def delete(self, m_id):
         session = get_db_session()

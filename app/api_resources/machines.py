@@ -19,7 +19,8 @@ class MachinesResource(Resource):
         session = get_db_session()
         if args['ids'] == 'all':
             return make_response(jsonify({'result': {'machines': 
-                                 [machine.to_dict(only=('id', 'title', 'price')) 
+                                 [machine.to_dict(only=('id', 'title', 'price', 
+                                 'worker.id', 'worker.title')) 
                                  for machine in session.query(Machine).all()]}}), 200)
 
         machines = []
@@ -31,8 +32,8 @@ class MachinesResource(Resource):
             return make_response(jsonify({'result': {'machines': 'not found'}}), 404)
 
         return make_response(jsonify({'result': 
-                                     {'machines': [machine.to_dict(only=('id', 'title', 'price')) 
-                                     for machine in machines]}}), 200)
+                                     {'machines': [machine.to_dict(only=('id', 'title', 'price', 
+                                     'worker.id', 'worker.title')) for machine in machines]}}), 200)
 
     def delete(self):
         args = MachinesResource.parser.parse_args()
