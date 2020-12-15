@@ -89,23 +89,23 @@ class OperationsResource(Resource):
 
         session = get_db_session()
         if args['ids'] == 'all':
-            return make_response(jsonify({'result': {'opetations': 
-                                 [opetation.to_dict(only=('id', 'title', 
+            return make_response(jsonify({'result': {'operations': 
+                                 [operation.to_dict(only=('id', 'title', 
                                  'machine.id', 'machine.title')) 
-                                 for opetation in session.query(Operation).all()]}}), 200)
+                                 for operation in session.query(Operation).all()]}}), 200)
 
-        opetations = []
+        operations = []
         for o_id in ids:
-            opetation = session.query(Operation).filter(Operation.id == o_id).first()
-            if opetation:
-                opetations.append(opetation)
-        if not opetations:
-            return make_response(jsonify({'result': {'opetations': 'not found'}}), 404)
+            operation = session.query(Operation).filter(Operation.id == o_id).first()
+            if operation:
+                operations.append(operation)
+        if not operations:
+            return make_response(jsonify({'result': {'operations': 'not found'}}), 404)
 
-        return make_response(jsonify({'result': {'opetations': 
-                                     [opetation.to_dict(only=('id', 'title', 
+        return make_response(jsonify({'result': {'operations': 
+                                     [operation.to_dict(only=('id', 'title', 
                                      'machine.id', 'machine.title')) 
-                                     for opetation in opetations]}}), 200)
+                                     for operation in operations]}}), 200)
 
     def delete(self):
         args = OperationsResource.parser.parse_args()
@@ -116,9 +116,9 @@ class OperationsResource(Resource):
 
         session = get_db_session()
         for o_id in ids:
-            opetation = session.query(Operation).filter(Operation.id == o_id).first()
-            if opetation:
-                session.delete(opetation)
+            operation = session.query(Operation).filter(Operation.id == o_id).first()
+            if operation:
+                session.delete(operation)
 
         session.commit()
         return make_response(jsonify({'result': {'success': 'OK'}}), 200)

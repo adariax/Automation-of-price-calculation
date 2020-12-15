@@ -49,3 +49,8 @@ from app.api_resources import constant
 
 api.add_resource(constant.ConstantResource, '/api/constant/<int:c_id>')
 api.add_resource(constant.ConstantsResource, '/api/constants')
+
+from app.api_resources import part
+
+api.add_resource(part.PartResource, '/api/part/<int:p_id>')
+api.add_resource(part.PartsResource, '/api/parts')

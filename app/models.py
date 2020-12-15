@@ -50,6 +50,7 @@ class Part(db.Model, SerializerMixin):
     title = db.Column(db.String, nullable=False)
 
     material_id = db.Column(db.Integer, db.ForeignKey('raw_material.id'), nullable=False)
+    material = db.relationship('RawMaterial', backref=db.backref('parts', lazy=True))
 
 
 class Product(db.Model, SerializerMixin):
