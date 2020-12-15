@@ -28,6 +28,7 @@ class Machine(db.Model, SerializerMixin):
 class Operation(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.String, nullable=False)
+    
     machine_id = db.Column(db.Integer, db.ForeignKey('machine.id'), nullable=False)
     machine = db.relationship('Machine', backref=db.backref('operations', lazy=True))
 
@@ -38,7 +39,7 @@ class Additional(db.Model, SerializerMixin):
     price = db.Column(db.Float, nullable=False)
 
 
-class Constants(db.Model, SerializerMixin):
+class Constant(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.String, nullable=False)
     value = db.Column(db.Float, nullable=False)
