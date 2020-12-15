@@ -39,3 +39,8 @@ from app.api_resources import operation, operations
 
 api.add_resource(operation.OperationResource, '/api/operation/<int:o_id>')
 api.add_resource(operations.OperationsResource, '/api/operations')
+
+from app.api_resources import additional, additionals
+
+api.add_resource(additional.AdditionalResource, '/api/additional/<int:a_id>')
+api.add_resource(additionals.AdditionalsResource, '/api/additionals')
