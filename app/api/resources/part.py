@@ -23,7 +23,8 @@ class PartResource(Resource):
 
         return make_response(jsonify({'result': {'part':
                              part.to_dict(only=('id', 'title',
-                             'material.id', 'material.title'))}}), 200)
+                             'material.id', 'material.title',
+                             'operations.id', 'operations.title'))}}), 200)
 
     def delete(self, p_id):
         session = get_db_session()
@@ -93,7 +94,8 @@ class PartsResource(Resource):
         if args['ids'] == 'all':
             return make_response(jsonify({'result': {'parts':
                                  [part.to_dict(only=('id', 'title',
-                                 'material.id', 'material.title'))
+                                 'material.id', 'material.title',
+                                 'operations.id', 'operations.title'))
                                  for part in session.query(Part).all()]}}), 200)
 
         parts = []
@@ -106,7 +108,8 @@ class PartsResource(Resource):
 
         return make_response(jsonify({'result': {'parts':
                                      [part.to_dict(only=('id', 'title',
-                                     'material.id', 'material.title'))
+                                     'material.id', 'material.title',
+                                     'operations.id', 'operations.title'))
                                      for part in parts]}}), 200)
 
     def delete(self):

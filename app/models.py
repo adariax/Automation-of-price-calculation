@@ -1,6 +1,25 @@
-from app import db, app
-from flask_login import UserMixin
+from app import db
 from sqlalchemy_serializer import SerializerMixin
+
+operation_part = db.Table('operation_part',
+                     db.Column('operation_id', db.Integer, db.ForeignKey('operation.id')),
+                     db.Column('part_id', db.Integer, db.ForeignKey('part.id'))
+                     )
+
+part_product = db.Table('part_product',
+                     db.Column('part_id', db.Integer, db.ForeignKey('part.id')),
+                     db.Column('product_id', db.Integer, db.ForeignKey('product.id'))
+                     )
+
+operation_product = db.Table('operation_product',
+                     db.Column('operation_id', db.Integer, db.ForeignKey('operation.id')),
+                     db.Column('product_id', db.Integer, db.ForeignKey('product.id'))
+                     )
+
+additional_product = db.Table('additional_product',
+                     db.Column('additional_id', db.Integer, db.ForeignKey('additional.id')),
+                     db.Column('product_id', db.Integer, db.ForeignKey('product.id'))
+                     )
 
 
 class RawMaterial(db.Model, SerializerMixin):
@@ -52,6 +71,10 @@ class Part(db.Model, SerializerMixin):
     material_id = db.Column(db.Integer, db.ForeignKey('raw_material.id'), nullable=False)
     material = db.relationship('RawMaterial', backref=db.backref('parts', lazy=True))
 
+    operations = db.relationship('Operation', 
+                                 secondary=operation_part, 
+                                 backref=db.backref('parts'))
+
 
 class Product(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -59,24 +82,3 @@ class Product(db.Model, SerializerMixin):
     r_coef = db.Column(db.Float, nullable=False)
     r_cost = db.Column(db.Float, nullable=False)
     w_cost = db.Column(db.Float, nullable=False)
-
-
-fav_posts = db.Table('operation_part',
-                     db.Column('operation_id', db.Integer, db.ForeignKey('operation.id')),
-                     db.Column('part_id', db.Integer, db.ForeignKey('part.id'))
-                     )
-
-fav_posts = db.Table('part_product',
-                     db.Column('part_id', db.Integer, db.ForeignKey('part.id')),
-                     db.Column('product_id', db.Integer, db.ForeignKey('product.id'))
-                     )
-
-fav_posts = db.Table('operation_product',
-                     db.Column('operation_id', db.Integer, db.ForeignKey('operation.id')),
-                     db.Column('product_id', db.Integer, db.ForeignKey('product.id'))
-                     )
-
-fav_posts = db.Table('additional_product',
-                     db.Column('additional_id', db.Integer, db.ForeignKey('additional.id')),
-                     db.Column('product_id', db.Integer, db.ForeignKey('product.id'))
-                     )

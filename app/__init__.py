@@ -18,44 +18,48 @@ def get_db_session() -> db.Session:
     return db.session
 
 
-api = Api(app)  # TODO: check user's possibility to change data
+app_api = Api(app)  # TODO: check user's possibility to change data
 
-from app.api_resources import material
+from app.api.resources import material
 
-api.add_resource(material.MaterialResource, '/api/material/<int:m_id>')
-api.add_resource(material.MaterialsResource, '/api/materials')
+app_api.add_resource(material.MaterialResource, '/api/material/<int:m_id>')
+app_api.add_resource(material.MaterialsResource, '/api/materials')
 
-from app.api_resources import worker
+from app.api.resources import worker
 
-api.add_resource(worker.WorkerResource, '/api/worker/<int:w_id>')
-api.add_resource(worker.WorkersResource, '/api/workers')
+app_api.add_resource(worker.WorkerResource, '/api/worker/<int:w_id>')
+app_api.add_resource(worker.WorkersResource, '/api/workers')
 
-from app.api_resources import machine
+from app.api.resources import machine
 
-api.add_resource(machine.MachineResource, '/api/machine/<int:m_id>')
-api.add_resource(machine.MachinesResource, '/api/machines')
+app_api.add_resource(machine.MachineResource, '/api/machine/<int:m_id>')
+app_api.add_resource(machine.MachinesResource, '/api/machines')
 
-from app.api_resources import operation
+from app.api.resources import operation
 
-api.add_resource(operation.OperationResource, '/api/operation/<int:o_id>')
-api.add_resource(operation.OperationsResource, '/api/operations')
+app_api.add_resource(operation.OperationResource, '/api/operation/<int:o_id>')
+app_api.add_resource(operation.OperationsResource, '/api/operations')
 
-from app.api_resources import additional
+from app.api.resources import additional
 
-api.add_resource(additional.AdditionalResource, '/api/additional/<int:a_id>')
-api.add_resource(additional.AdditionalsResource, '/api/additionals')
+app_api.add_resource(additional.AdditionalResource, '/api/additional/<int:a_id>')
+app_api.add_resource(additional.AdditionalsResource, '/api/additionals')
 
-from app.api_resources import constant
+from app.api.resources import constant
 
-api.add_resource(constant.ConstantResource, '/api/constant/<int:c_id>')
-api.add_resource(constant.ConstantsResource, '/api/constants')
+app_api.add_resource(constant.ConstantResource, '/api/constant/<int:c_id>')
+app_api.add_resource(constant.ConstantsResource, '/api/constants')
 
-from app.api_resources import part
+from app.api.resources import part
 
-api.add_resource(part.PartResource, '/api/part/<int:p_id>')
-api.add_resource(part.PartsResource, '/api/parts')
+app_api.add_resource(part.PartResource, '/api/part/<int:p_id>')
+app_api.add_resource(part.PartsResource, '/api/parts')
 
-from app.api_resources import product
+from app.api.resources import product
 
-api.add_resource(product.ProductResource, '/api/product/<int:p_id>')
-api.add_resource(product.ProductsResource, '/api/products')
+app_api.add_resource(product.ProductResource, '/api/product/<int:p_id>')
+app_api.add_resource(product.ProductsResource, '/api/products')
+
+from app.api.relations import blueprint_relations
+
+app.register_blueprint(blueprint_relations)
