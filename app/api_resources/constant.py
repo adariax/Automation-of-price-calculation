@@ -99,7 +99,7 @@ class ConstantsResource(Resource):
         args = ConstantsResource.parser.parse_args()
         try:
             ids = list(map(int, args['ids'].split(',')))
-        except TypeError:
+        except ValueError:
             return make_response(jsonify({'result': {'error': 'wrong ids'}}), 400)
 
         session = get_db_session()

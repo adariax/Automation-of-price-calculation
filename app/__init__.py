@@ -54,3 +54,8 @@ from app.api_resources import part
 
 api.add_resource(part.PartResource, '/api/part/<int:p_id>')
 api.add_resource(part.PartsResource, '/api/parts')
+
+from app.api_resources import product
+
+api.add_resource(product.ProductResource, '/api/product/<int:p_id>')
+api.add_resource(product.ProductsResource, '/api/products')
