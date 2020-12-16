@@ -25,7 +25,11 @@ class ProductResource(Resource):
         if not product:
             return make_response(jsonify({'result': {'product': 'not found'}}), 404)
 
-        return make_response(jsonify({'result': {'product': product.to_dict()}}), 200)
+        return make_response(jsonify({'result': {'product': 
+                             product.to_dict(only=('id', 'title', 'r_cost', 'w_cost',
+                             'r_coef', 'operations.id', 'operations.title',
+                             'parts.id', 'parts.title', 
+                             'additionals.id', 'additionals.title'))}}), 200)
 
     def delete(self, p_id):
         session = get_db_session()
@@ -85,7 +89,10 @@ class ProductsResource(Resource):
         session = get_db_session()
         if args['ids'] == 'all':
             return make_response(jsonify(
-                {'result': {'products': [product.to_dict() 
+                {'result': {'products': [product.to_dictproduct.to_dict(
+                only=('id', 'title', 'r_cost', 'w_cost', 'r_coef', 
+                'operations.id', 'operations.title', 'parts.id', 'parts.title',
+                'additionals.id', 'additionals.title')) 
                 for product in session.query(Product).all()]}}
                 ), 200)
 
@@ -99,7 +106,10 @@ class ProductsResource(Resource):
             return make_response(jsonify({'result': {'products': 'not found'}}), 404)
 
         return make_response(jsonify(
-            {'result': {'products': [product.to_dict() for product in products]}}), 200)
+            {'result': {'products': [product.to_dict(
+                        only=('id', 'title', 'r_cost', 'w_cost', 'r_coef', 
+                        'operations.id', 'operations.title', 'parts.id', 'parts.title',
+                        'additionals.id', 'additionals.title')) for product in products]}}), 200)
 
     def delete(self):
         args = ProductsResource.parser.parse_args()

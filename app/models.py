@@ -82,3 +82,15 @@ class Product(db.Model, SerializerMixin):
     r_coef = db.Column(db.Float, nullable=False)
     r_cost = db.Column(db.Float, nullable=False)
     w_cost = db.Column(db.Float, nullable=False)
+
+    operations = db.relationship('Operation', 
+                                 secondary=operation_product, 
+                                 backref=db.backref('products'))
+    
+    parts = db.relationship('Part', 
+                            secondary=part_product, 
+                            backref=db.backref('products'))
+    
+    additionals = db.relationship('Additional', 
+                                  secondary=additional_product, 
+                                  backref=db.backref('products'))
