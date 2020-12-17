@@ -2,6 +2,7 @@ from flask import request, jsonify, make_response, Blueprint
 
 from app import get_db_session
 from app.models import Operation, Part, Product, Additional
+from app.models import AdditionalProduct, OperationPart, OperationProduct
 
 blueprint_relations = Blueprint('relations', __name__, template_folder='')
 
@@ -12,6 +13,7 @@ def operation_part():
     try:
         operation_id = int(args.get('operation_id'))
         part_id = int(args.get('part_id'))
+        time = float(args.get('time')) if request.method == 'POST' else 0
     except (ValueError, TypeError):
         return make_response(jsonify({'result': {'error': 'bad request'}}), 400)
 
@@ -22,16 +24,18 @@ def operation_part():
     if not operation or not part:
         return make_response(jsonify({'result': {'error': 'bad id'}}), 400)
 
+    op = session.query(OperationPart).filter(OperationPart.part_id == part_id,
+                                             OperationPart.operation_id == operation_id).first()
+
     if request.method == 'POST':
-        if operation in part.operations:
+        if op:
             return make_response(jsonify({'result': {'error': 'bad id'}}), 400)
 
-        part.operations.append(operation)
+        op = OperationPart(operation_id=operation.id, part_id=part.id, time=time)
+        session.add(op)
     elif request.method == 'DELETE':
-        if operation not in part.operations:
-            return make_response(jsonify({'result': {'error': 'bad id'}}), 400)
-
-        part.operations.remove(operation)
+        if op:
+            session.delete(op)
     session.commit()
 
     return make_response(jsonify({'result': {'status': 'OK'}}), 200)
@@ -43,6 +47,7 @@ def operation_product():
     try:
         operation_id = int(args.get('operation_id'))
         product_id = int(args.get('product_id'))
+        time = float(args.get('time')) if request.method == 'POST' else 0
     except (ValueError, TypeError):
         return make_response(jsonify({'result': {'error': 'bad request'}}), 400)
 
@@ -53,16 +58,22 @@ def operation_product():
     if not operation or not product:
         return make_response(jsonify({'result': {'error': 'bad id'}}), 400)
 
-    if request.method == 'POST':
-        if operation in product.operations:
+    op = session.query(OperationProduct).filter(OperationProduct.product_id == product_id,
+                                                OperationProduct.operation_id == operation_id
+                                                ).first()
+    print(operation_id, args)
+    if request.method == 'POST': 
+        if op:
+            print(op)
             return make_response(jsonify({'result': {'error': 'bad id'}}), 400)
 
-        product.operations.append(operation)
+        op = OperationProduct(operation_id=operation.id, product_id=product.id, time=time)
+        session.add(op)
     elif request.method == 'DELETE':
-        if operation not in product.operations:
+        if not op:
             return make_response(jsonify({'result': {'error': 'bad id'}}), 400)
 
-        product.operations.remove(operation)
+        session.delete(op)
     session.commit()
 
     return make_response(jsonify({'result': {'status': 'OK'}}), 200)
@@ -105,6 +116,7 @@ def additional_product():
     try:
         additional_id = int(args.get('additional_id'))
         product_id = int(args.get('product_id'))
+        count = int(args.get('count')) if request.method == 'POST' else 0
     except (ValueError, TypeError):
         return make_response(jsonify({'result': {'error': 'bad request'}}), 400)
 
@@ -115,16 +127,18 @@ def additional_product():
     if not additional or not product:
         return make_response(jsonify({'result': {'error': 'bad id'}}), 400)
 
-    if request.method == 'POST':  # TODO: make possible adding any count of additionals/parts
-        if additional in product.additionals:
+    ap = session.query(AdditionalProduct).filter(AdditionalProduct.product_id == product_id,
+                                                 AdditionalProduct.additional_id == additional_id
+                                                 ).first()
+    if request.method == 'POST':
+        if ap:
             return make_response(jsonify({'result': {'error': 'bad id'}}), 400)
-
-        product.additionals.append(additional)
+        ap = AdditionalProduct(additional_id=additional.id, product_id=product.id, count=count)
+        session.add(ap)
     elif request.method == 'DELETE':
-        if additional not in product.additionals:
+        if not ap:
             return make_response(jsonify({'result': {'error': 'bad id'}}), 400)
-
-        product.additionals.remove(additional)
+        session.delete(ap)
     session.commit()
 
     return make_response(jsonify({'result': {'status': 'OK'}}), 200)

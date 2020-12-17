@@ -1,25 +1,46 @@
 from app import db
 from sqlalchemy_serializer import SerializerMixin
 
-operation_part = db.Table('operation_part',
-                     db.Column('operation_id', db.Integer, db.ForeignKey('operation.id')),
-                     db.Column('part_id', db.Integer, db.ForeignKey('part.id'))
-                     )
-
 part_product = db.Table('part_product',
-                     db.Column('part_id', db.Integer, db.ForeignKey('part.id')),
-                     db.Column('product_id', db.Integer, db.ForeignKey('product.id'))
-                     )
+                        db.Column('part_id', db.Integer, db.ForeignKey('part.id')),
+                        db.Column('product_id', db.Integer, db.ForeignKey('product.id'))
+                        )
 
-operation_product = db.Table('operation_product',
-                     db.Column('operation_id', db.Integer, db.ForeignKey('operation.id')),
-                     db.Column('product_id', db.Integer, db.ForeignKey('product.id'))
-                     )
 
-additional_product = db.Table('additional_product',
-                     db.Column('additional_id', db.Integer, db.ForeignKey('additional.id')),
-                     db.Column('product_id', db.Integer, db.ForeignKey('product.id'))
-                     )
+class OperationPart(db.Model, SerializerMixin):
+    operation_id = db.Column(db.Integer, db.ForeignKey('operation.id'), primary_key=True)
+    operation = db.relationship('Operation', backref=db.backref('parts', 
+                                             cascade='save-update, merge, delete, delete-orphan'))
+
+    part_id = db.Column(db.Integer, db.ForeignKey('part.id'), primary_key=True)
+    part = db.relationship('Part', backref=db.backref('operations', 
+                                   cascade='save-update, merge, delete, delete-orphan'))
+
+    time = db.Column(db.Float, nullable=False)
+
+
+class OperationProduct(db.Model, SerializerMixin):
+    operation_id = db.Column(db.Integer, db.ForeignKey('operation.id'), primary_key=True)
+    operation = db.relationship('Operation', backref=db.backref('products', 
+                                             cascade='save-update, merge, delete, delete-orphan'))
+    
+    product_id = db.Column(db.Integer, db.ForeignKey('product.id'), primary_key=True)
+    product = db.relationship('Product', backref=db.backref('operations', 
+                                         cascade='save-update, merge, delete, delete-orphan'))
+
+    time = db.Column(db.Float, nullable=False)
+
+
+class AdditionalProduct(db.Model, SerializerMixin):
+    additional_id = db.Column(db.Integer, db.ForeignKey('additional.id'), primary_key=True)
+    additional = db.relationship('Additional', backref=db.backref('products', 
+                                               cascade='save-update, merge, delete, delete-orphan'))
+
+    product_id = db.Column(db.Integer, db.ForeignKey('product.id'), primary_key=True)
+    product = db.relationship('Product', backref=db.backref('additionals', 
+                                         cascade='save-update, merge, delete, delete-orphan'))
+
+    count = db.Column(db.Integer, nullable=False)
 
 
 class RawMaterial(db.Model, SerializerMixin):
@@ -71,10 +92,6 @@ class Part(db.Model, SerializerMixin):
     material_id = db.Column(db.Integer, db.ForeignKey('raw_material.id'), nullable=False)
     material = db.relationship('RawMaterial', backref=db.backref('parts', lazy=True))
 
-    operations = db.relationship('Operation', 
-                                 secondary=operation_part, 
-                                 backref=db.backref('parts'))
-
 
 class Product(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -82,15 +99,7 @@ class Product(db.Model, SerializerMixin):
     r_coef = db.Column(db.Float, nullable=False)
     r_cost = db.Column(db.Float, nullable=False)
     w_cost = db.Column(db.Float, nullable=False)
-
-    operations = db.relationship('Operation', 
-                                 secondary=operation_product, 
-                                 backref=db.backref('products'))
     
     parts = db.relationship('Part', 
                             secondary=part_product, 
                             backref=db.backref('products'))
-    
-    additionals = db.relationship('Additional', 
-                                  secondary=additional_product, 
-                                  backref=db.backref('products'))

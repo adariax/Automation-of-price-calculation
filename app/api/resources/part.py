@@ -2,7 +2,18 @@ from flask import jsonify, make_response
 from flask_restful import Resource, reqparse
 
 from app import get_db_session
-from app.models import Part, RawMaterial
+from app.models import Part, RawMaterial, Operation
+
+
+def dict(part):
+    operations = []
+    session = get_db_session()
+    for obj in part.operations:
+        operations.append(session.query(Operation).filter(Operation.id == obj.operation_id).first())
+    return {'id': part.id, 'title': part.title,
+            'material': {'id': part.material.id, 'title': part.material.title},
+            'operations': [{'id': operation.id, 
+                            'title': operation.title} for operation in operations]}
 
 
 class PartResource(Resource):
@@ -21,10 +32,7 @@ class PartResource(Resource):
         if not part:
             return make_response(jsonify({'result': {'part': 'not found'}}), 404)
 
-        return make_response(jsonify({'result': {'part':
-                             part.to_dict(only=('id', 'title',
-                             'material.id', 'material.title',
-                             'operations.id', 'operations.title'))}}), 200)
+        return make_response(jsonify({'result': {'part': dict(part)}}), 200)
 
     def delete(self, p_id):
         session = get_db_session()
@@ -92,10 +100,7 @@ class PartsResource(Resource):
 
         session = get_db_session()
         if args['ids'] == 'all':
-            return make_response(jsonify({'result': {'parts':
-                                 [part.to_dict(only=('id', 'title',
-                                 'material.id', 'material.title',
-                                 'operations.id', 'operations.title'))
+            return make_response(jsonify({'result': {'parts': [dict(part) 
                                  for part in session.query(Part).all()]}}), 200)
 
         parts = []
@@ -106,11 +111,7 @@ class PartsResource(Resource):
         if not parts:
             return make_response(jsonify({'result': {'parts': 'not found'}}), 404)
 
-        return make_response(jsonify({'result': {'parts':
-                                     [part.to_dict(only=('id', 'title',
-                                     'material.id', 'material.title',
-                                     'operations.id', 'operations.title'))
-                                     for part in parts]}}), 200)
+        return make_response(jsonify({'result': {'parts': [dict(part) for part in parts]}}), 200)
 
     def delete(self):
         args = PartsResource.parser.parse_args()

@@ -2,7 +2,26 @@ from flask import jsonify, make_response
 from flask_restful import Resource, reqparse
 
 from app import get_db_session
-from app.models import Product
+from app.models import Product, Additional, Operation
+
+
+def dict(product):
+    operations, additionals = [], []
+    session = get_db_session()
+
+    for obj in product.operations:
+        operations.append(session.query(Operation).filter(Operation.id == obj.operation_id).first())
+
+    for obj in product.additionals:
+        additionals.append(session.query(Additional).filter(Additional.id == 
+                                                            obj.additional_id).first())
+
+    return {'id': product.id, 'title': product.title,
+            'parts': [{'id': part.id, 'title': part.title} for part in product.parts],
+            'operations': [{'id': operation.id, 
+                            'title': operation.title} for operation in operations],
+            'additionals': [{'id': additional.id, 
+                            'title': additional.title} for additional in additionals]}
 
 
 class ProductResource(Resource):
@@ -25,11 +44,7 @@ class ProductResource(Resource):
         if not product:
             return make_response(jsonify({'result': {'product': 'not found'}}), 404)
 
-        return make_response(jsonify({'result': {'product': 
-                             product.to_dict(only=('id', 'title', 'r_cost', 'w_cost',
-                             'r_coef', 'operations.id', 'operations.title',
-                             'parts.id', 'parts.title', 
-                             'additionals.id', 'additionals.title'))}}), 200)
+        return make_response(jsonify({'result': {'product': dict(product)}}), 200)
 
     def delete(self, p_id):
         session = get_db_session()
@@ -88,13 +103,8 @@ class ProductsResource(Resource):
 
         session = get_db_session()
         if args['ids'] == 'all':
-            return make_response(jsonify(
-                {'result': {'products': [product.to_dictproduct.to_dict(
-                only=('id', 'title', 'r_cost', 'w_cost', 'r_coef', 
-                'operations.id', 'operations.title', 'parts.id', 'parts.title',
-                'additionals.id', 'additionals.title')) 
-                for product in session.query(Product).all()]}}
-                ), 200)
+            return make_response(jsonify({'result': {'products': [dict(product) 
+                                         for product in session.query(Product).all()]}}), 200)
 
         session = get_db_session()
         products = []
@@ -106,10 +116,7 @@ class ProductsResource(Resource):
             return make_response(jsonify({'result': {'products': 'not found'}}), 404)
 
         return make_response(jsonify(
-            {'result': {'products': [product.to_dict(
-                        only=('id', 'title', 'r_cost', 'w_cost', 'r_coef', 
-                        'operations.id', 'operations.title', 'parts.id', 'parts.title',
-                        'additionals.id', 'additionals.title')) for product in products]}}), 200)
+            {'result': {'products': [dict(product) for product in products]}}), 200)
 
     def delete(self):
         args = ProductsResource.parser.parse_args()
