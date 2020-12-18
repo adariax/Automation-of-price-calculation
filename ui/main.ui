@@ -460,30 +460,18 @@
     <property name="title">
      <string>Изменить</string>
     </property>
-    <addaction name="material_c"/>
-    <addaction name="worker_c"/>
-    <addaction name="machine_c"/>
-    <addaction name="operation_c"/>
-    <addaction name="additional_c"/>
-    <addaction name="separator"/>
-    <addaction name="part_c"/>
-    <addaction name="separator"/>
     <addaction name="product_c"/>
-   </widget>
-   <widget class="QMenu" name="see">
-    <property name="title">
-     <string>Просмотреть</string>
-    </property>
-    <addaction name="materials"/>
-    <addaction name="workers"/>
-    <addaction name="machines"/>
-    <addaction name="operations"/>
-    <addaction name="additionals"/>
     <addaction name="separator"/>
+    <addaction name="parts"/>
+    <addaction name="separator"/>
+    <addaction name="material_list"/>
+    <addaction name="worker_list"/>
+    <addaction name="machine_list"/>
+    <addaction name="operation_list"/>
+    <addaction name="additional_list"/>
    </widget>
    <addaction name="add"/>
    <addaction name="chng"/>
-   <addaction name="see"/>
   </widget>
   <action name="material_a">
    <property name="checkable">
@@ -614,6 +602,36 @@
   <action name="product_c">
    <property name="text">
     <string>Продукт</string>
+   </property>
+  </action>
+  <action name="parts">
+   <property name="text">
+    <string>Деталь</string>
+   </property>
+  </action>
+  <action name="material_list">
+   <property name="text">
+    <string>Материалы</string>
+   </property>
+  </action>
+  <action name="worker_list">
+   <property name="text">
+    <string>Рабочие</string>
+   </property>
+  </action>
+  <action name="machine_list">
+   <property name="text">
+    <string>Оборудование</string>
+   </property>
+  </action>
+  <action name="operation_list">
+   <property name="text">
+    <string>Операции</string>
+   </property>
+  </action>
+  <action name="additional_list">
+   <property name="text">
+    <string>Комплектующие</string>
    </property>
   </action>
  </widget>

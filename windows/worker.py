@@ -1,6 +1,7 @@
 from PyQt5 import uic
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QWidget, QMessageBox, QDialog
+from PyQt5.QtWidgets import QMessageBox, QDialog
+from PyQt5.QtWidgets import QTableWidgetItem
 
 from requests import get, put, post
 
@@ -40,12 +41,53 @@ class Worker(QDialog):
         worker = get(URL + f'/api/worker/{self.id}').json()['result']['worker']
 
         self.title.setText(worker['title'])
-        self.price.valueFromText(str(worker['price']))
+        self.price.setValue(worker['price'])
 
 
-class Workers(QWidget):
+class Workers(QDialog):
     def __init__(self):
         super().__init__()
         uic.loadUi('./ui/workers.ui', self)
+        self.setWindowFlag(Qt.WindowContextHelpButtonHint, False)
 
-        pass
+        self.table.cellClicked.connect(self.row_focus)
+        self.table.cellDoubleClicked.connect(self.edit_worker)
+
+        self.fields = 0
+        self.load()
+
+    def row_focus(self):  # select all column of chosen film
+        for i in range(self.fields):
+            self.table.item(self.table.currentRow(), i).setSelected(True)
+
+    def edit_worker(self):
+        self.row_focus()
+
+        w_id = self.table.currentItem().data(Qt.UserRole)
+
+        window = Worker(mode='p', w_id=w_id)
+        window.exec()
+
+        self.load()
+
+    def load(self):
+        workers = get(URL + f'/api/workers?ids=all').json()['result']['workers']
+
+        self.fields = len(workers[0].keys()) - 2
+
+        self.table.setColumnCount(self.fields)
+        self.table.setHorizontalHeaderLabels(('Название', 'Цена'))
+
+        self.table.setRowCount(0)
+        for i, worker in enumerate(workers):
+            self.table.setRowCount(self.table.rowCount() + 1)
+
+            item = QTableWidgetItem(worker['title'])
+            item.setData(Qt.UserRole, worker['id'])
+            self.table.setItem(i, 0, item)
+
+            item = QTableWidgetItem(str(worker['price']))
+            item.setData(Qt.UserRole, worker['id'])
+            self.table.setItem(i, 1, item)
+
+        self.table.resizeColumnsToContents()

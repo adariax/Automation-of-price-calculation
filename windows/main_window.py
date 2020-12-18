@@ -23,6 +23,14 @@ class Application(QMainWindow):
         self.additional_a.triggered.connect(self.create_additional)
         self.material_a.triggered.connect(self.create_material)
 
+        # self.product_c.triggered.connect(self.create_prod)
+
+        self.operation_list.triggered.connect(self.see_operation)
+        self.machine_list.triggered.connect(self.see_machine)
+        self.worker_list.triggered.connect(self.see_worker)
+        self.additional_list.triggered.connect(self.see_additional)
+        self.material_list.triggered.connect(self.see_material)
+
         self.act.clicked.connect(self.product_upd)
 
         self.load(1)
@@ -53,6 +61,26 @@ class Application(QMainWindow):
         window = Material()
         window.exec()
 
+    def see_operation(self):
+        window = Operations()
+        window.exec()
+
+    def see_machine(self):
+        window = Machines()
+        window.exec()
+
+    def see_worker(self):
+        window = Workers()
+        window.exec()
+
+    def see_additional(self):
+        window = Additionals()
+        window.exec()
+
+    def see_material(self):
+        window = Materials()
+        window.exec()
+
     def product_upd(self):
         id = self.ID.text()
 
@@ -67,9 +95,7 @@ class Application(QMainWindow):
         self.load(id)
     
     def load(self, p_id):
-        print(URL + f'/api/product/{p_id}')
         response = get(URL + f'/api/product/{p_id}')
-        print(response)
         if not response:
             self.create_prod()
             return

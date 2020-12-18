@@ -1,6 +1,7 @@
 from PyQt5 import uic
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QWidget, QMessageBox, QDialog
+from PyQt5.QtWidgets import QMessageBox, QDialog
+from PyQt5.QtWidgets import QTableWidgetItem
 
 from requests import get, put, post
 
@@ -40,12 +41,53 @@ class Additional(QDialog):
         additional = get(URL + f'/api/additional/{self.id}').json()['result']['additional']
 
         self.title.setText(additional['title'])
-        self.price.valueFromText(str(additional['price']))
+        self.price.setValue(additional['price'])
 
 
-class Additionals(QWidget):
+class Additionals(QDialog):
     def __init__(self):
         super().__init__()
         uic.loadUi('./ui/additionals.ui', self)
+        self.setWindowFlag(Qt.WindowContextHelpButtonHint, False)
 
-        pass
+        self.table.cellClicked.connect(self.row_focus)
+        self.table.cellDoubleClicked.connect(self.edit_additional)
+
+        self.fields = 0
+        self.load()
+
+    def row_focus(self):  # select all column of chosen film
+        for i in range(self.fields):
+            self.table.item(self.table.currentRow(), i).setSelected(True)
+
+    def edit_additional(self):
+        self.row_focus()
+
+        a_id = self.table.currentItem().data(Qt.UserRole)
+
+        window = Additional(mode='p', a_id=a_id)
+        window.exec()
+
+        self.load()
+
+    def load(self):
+        additionals = get(URL + f'/api/additionals?ids=all').json()['result']['additionals']
+
+        self.fields = len(additionals[0].keys()) - 1
+
+        self.table.setColumnCount(self.fields)
+        self.table.setHorizontalHeaderLabels(('Название', 'Цена'))
+
+        self.table.setRowCount(0)
+        for i, additional in enumerate(additionals):
+            self.table.setRowCount(self.table.rowCount() + 1)
+
+            item = QTableWidgetItem(additional['title'])
+            item.setData(Qt.UserRole, additional['id'])
+            self.table.setItem(i, 0, item)
+
+            item = QTableWidgetItem(str(additional['price']))
+            item.setData(Qt.UserRole, additional['id'])
+            self.table.setItem(i, 1, item)
+
+        self.table.resizeColumnsToContents()

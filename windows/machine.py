@@ -1,6 +1,7 @@
 from PyQt5 import uic
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QWidget, QMessageBox, QDialog
+from PyQt5.QtWidgets import QMessageBox, QDialog
+from PyQt5.QtWidgets import QTableWidgetItem
 
 from requests import get, put, post
 
@@ -51,13 +52,57 @@ class Machine(QDialog):
         machine = get(URL + f'/api/machine/{self.id}').json()['result']['machine']
 
         self.title.setText(machine['title'])
-        self.price.valueFromText(str(machine['price']))
+        self.price.setValue(machine['price'])
 
 
-class Machines(QWidget):
+class Machines(QDialog):
     def __init__(self):
         super().__init__()
         uic.loadUi('./ui/machines.ui', self)
         self.setWindowFlag(Qt.WindowContextHelpButtonHint, False)
 
-        pass
+        self.table.cellClicked.connect(self.row_focus)
+        self.table.cellDoubleClicked.connect(self.edit_machine)
+
+        self.fields = 0
+        self.load()
+
+    def row_focus(self):  # select all column of chosen film
+        for i in range(self.fields):
+            self.table.item(self.table.currentRow(), i).setSelected(True)
+
+    def edit_machine(self):
+        self.row_focus()
+
+        m_id = self.table.currentItem().data(Qt.UserRole)
+
+        window = Machine(mode='p', m_id=m_id)
+        window.exec()
+
+        self.load()
+
+    def load(self):
+        machines = get(URL + f'/api/machines?ids=all').json()['result']['machines']
+
+        self.fields = len(machines[0].keys()) - 1
+
+        self.table.setColumnCount(self.fields)
+        self.table.setHorizontalHeaderLabels(('Название', 'Цена', 'Рабочий'))
+
+        self.table.setRowCount(0)
+        for i, machine in enumerate(machines):
+            self.table.setRowCount(self.table.rowCount() + 1)
+
+            item = QTableWidgetItem(machine['title'])
+            item.setData(Qt.UserRole, machine['id'])
+            self.table.setItem(i, 0, item)
+
+            item = QTableWidgetItem(str(machine['price']))
+            item.setData(Qt.UserRole, machine['id'])
+            self.table.setItem(i, 1, item)
+
+            item = QTableWidgetItem(str(machine['worker']['title']))
+            item.setData(Qt.UserRole, machine['id'])
+            self.table.setItem(i, 2, item)
+
+        self.table.resizeColumnsToContents()

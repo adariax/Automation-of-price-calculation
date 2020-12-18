@@ -95,7 +95,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Процент отходов</string>
+      <string>Отходы (в частях)</string>
      </property>
     </widget>
    </item>
