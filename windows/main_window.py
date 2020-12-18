@@ -23,7 +23,7 @@ class Application(QMainWindow):
         self.additional_a.triggered.connect(self.create_additional)
         self.material_a.triggered.connect(self.create_material)
 
-        # self.product_c.triggered.connect(self.create_prod)
+        self.product_c.triggered.connect(self.change_product)
 
         self.operation_list.triggered.connect(self.see_operation)
         self.machine_list.triggered.connect(self.see_machine)
@@ -44,6 +44,13 @@ class Application(QMainWindow):
     def create_operation(self):
         window = Operation()
         window.exec()
+
+    def change_product(self):
+        window = Product()
+        window.exec()
+        p_id = window.p_id
+
+        self.load(p_id)
 
     def create_machine(self):
         window = Machine()
