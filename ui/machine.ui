@@ -41,7 +41,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="close">
+      <widget class="QPushButton" name="closing">
        <property name="font">
         <font>
          <pointsize>16</pointsize>
@@ -114,6 +114,9 @@
       <font>
        <pointsize>14</pointsize>
       </font>
+     </property>
+     <property name="maximum">
+      <double>9999.989999999999782</double>
      </property>
     </widget>
    </item>

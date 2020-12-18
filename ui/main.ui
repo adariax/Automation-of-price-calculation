@@ -23,7 +23,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>Автоматизация расчёта себестоимости изделия</string>
+   <string>Автоматизация расчёта себестоимости изделий</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QLabel" name="name_label">
@@ -456,18 +456,6 @@
     <addaction name="separator"/>
     <addaction name="product_a"/>
    </widget>
-   <widget class="QMenu" name="del">
-    <property name="title">
-     <string>Удалить</string>
-    </property>
-    <addaction name="material_d"/>
-    <addaction name="worker_d"/>
-    <addaction name="machine_d"/>
-    <addaction name="operation_d"/>
-    <addaction name="additional_d"/>
-    <addaction name="separator"/>
-    <addaction name="part_d"/>
-   </widget>
    <widget class="QMenu" name="chng">
     <property name="title">
      <string>Изменить</string>
@@ -494,7 +482,6 @@
     <addaction name="separator"/>
    </widget>
    <addaction name="add"/>
-   <addaction name="del"/>
    <addaction name="chng"/>
    <addaction name="see"/>
   </widget>
@@ -516,7 +503,7 @@
   </action>
   <action name="worker_a">
    <property name="text">
-    <string>Рабочий</string>
+    <string>Рабочего</string>
    </property>
   </action>
   <action name="part_a">
@@ -601,7 +588,7 @@
   </action>
   <action name="operation_a">
    <property name="text">
-    <string>Операция</string>
+    <string>Операцию</string>
    </property>
   </action>
   <action name="operation_d">

@@ -4,27 +4,24 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow
 from PyQt5.QtWidgets import QListWidgetItem
 
+from widgets import *
+
 from requests import get, put, post, delete
 
 from info import URL
 
  
-class MyWidget(QMainWindow):
+class Application(QMainWindow):
     def __init__(self):
         super().__init__()
         uic.loadUi('./ui/main.ui', self)
 
-        '''self.del_o.clicked.connect(self.delette_product_operation)
-        self.add_o.clicked.connect(self.add_product_operation)
-
-        self.del_a.clicked.connect(self.delette_product_additional)
-        self.add_a.clicked.connect(self.add_product_additional)
-
-        self.del_p.clicked.connect(self.delette_product_part)
-        self.add_ex.clicked.connect(self.add_existing_part)
-        self.crt_new.clicked.connect(self.create_add_part)'''
-
         self.product_a.triggered.connect(self.create_prod)
+        self.operation_a.triggered.connect(self.create_operation)
+        self.machine_a.triggered.connect(self.create_machine)
+        self.worker_a.triggered.connect(self.create_worker)
+        self.additional_a.triggered.connect(self.create_additional)
+        self.material_a.triggered.connect(self.create_material)
 
         self.act.clicked.connect(self.product_upd)
 
@@ -35,6 +32,26 @@ class MyWidget(QMainWindow):
         product_id = get(URL + '/api/products?ids=all').json()['result']['products'][-1]['id']
         self.ID.setText(str(product_id))
         self.load(product_id)
+
+    def create_operation(self):
+        window = Operation()
+        window.exec()
+
+    def create_machine(self):
+        window = Machine()
+        window.exec()
+
+    def create_worker(self):
+        window = Worker()
+        window.exec()
+
+    def create_additional(self):
+        window = Additional()
+        window.exec()
+
+    def create_material(self):
+        window = Material()
+        window.exec()
 
     def product_upd(self):
         id = self.ID.text()
@@ -87,6 +104,6 @@ class MyWidget(QMainWindow):
 
 
 descktop_app = QApplication(sys.argv)
-ex = MyWidget()
+ex = Application()
 ex.show()
 sys.exit(descktop_app.exec_())

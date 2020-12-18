@@ -83,7 +83,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="close">
+      <widget class="QPushButton" name="closing">
        <property name="font">
         <font>
          <pointsize>16</pointsize>
