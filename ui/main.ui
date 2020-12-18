@@ -462,8 +462,6 @@
     </property>
     <addaction name="product_c"/>
     <addaction name="separator"/>
-    <addaction name="parts"/>
-    <addaction name="separator"/>
     <addaction name="material_list"/>
     <addaction name="worker_list"/>
     <addaction name="machine_list"/>

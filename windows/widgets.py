@@ -4,4 +4,8 @@ from worker import Worker, Workers
 from machine import Machine, Machines
 from operation import Operation, Operations
 
+from adding import AddOperation
+
 from product import Product
+
+from part import Part#, Parts

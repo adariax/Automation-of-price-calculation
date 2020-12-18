@@ -17,6 +17,8 @@ class Application(QMainWindow):
         uic.loadUi('./ui/main.ui', self)
 
         self.product_a.triggered.connect(self.create_prod)
+        self.part_a.triggered.connect(self.create_part)
+
         self.operation_a.triggered.connect(self.create_operation)
         self.machine_a.triggered.connect(self.create_machine)
         self.worker_a.triggered.connect(self.create_worker)
@@ -35,22 +37,26 @@ class Application(QMainWindow):
 
         self.load(1)
 
+    def create_part(self):
+        window = Part()
+        window.exec()
+
     def create_prod(self):
-        post(URL + f'/api/product/0?title=ПРОДУКТ&r_coef=0.0&r_cost=1&w_cost=1')
+        post(URL + f'/api/product/0?title=title&r_coef=0.0&r_cost=1&w_cost=1')
         product_id = get(URL + '/api/products?ids=all').json()['result']['products'][-1]['id']
         self.ID.setText(str(product_id))
         self.load(product_id)
-
-    def create_operation(self):
-        window = Operation()
-        window.exec()
 
     def change_product(self):
         window = Product()
         window.exec()
         p_id = window.p_id
+        if p_id != 0:
+            self.load(p_id)
 
-        self.load(p_id)
+    def create_operation(self):
+        window = Operation()
+        window.exec()
 
     def create_machine(self):
         window = Machine()
