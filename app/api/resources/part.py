@@ -60,7 +60,7 @@ class PartResource(Resource):
         session = get_db_session()
         part = Part()
         part.title = args['title']
-        part.material_id = args['materual_count']
+        part.material_id = args['material_count']
         if session.query(RawMaterial).filter(RawMaterial.id == args['material_id']).first():
             part.material_id = args['material_id']
         else:
