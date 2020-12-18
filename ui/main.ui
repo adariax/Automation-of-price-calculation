@@ -81,7 +81,7 @@
       <rect>
        <x>10</x>
        <y>200</y>
-       <width>91</width>
+       <width>181</width>
        <height>31</height>
       </rect>
      </property>
@@ -94,12 +94,12 @@
       <string>Удалить</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="add_ex">
+    <widget class="QPushButton" name="add_p">
      <property name="geometry">
       <rect>
-       <x>110</x>
+       <x>200</x>
        <y>200</y>
-       <width>211</width>
+       <width>281</width>
        <height>31</height>
       </rect>
      </property>
@@ -109,25 +109,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Выбрать существующую</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="crt_new">
-     <property name="geometry">
-      <rect>
-       <x>330</x>
-       <y>200</y>
-       <width>151</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>12</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>Создать новую</string>
+      <string>Добавить</string>
      </property>
     </widget>
     <widget class="QListWidget" name="parts_list">
@@ -517,6 +499,12 @@
    <addaction name="see"/>
   </widget>
   <action name="material_a">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>Материал</string>
    </property>
