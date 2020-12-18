@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import QListWidgetItem
 
 from requests import get, put, post, delete
 
-from info import DOMEN
+from info import URL
 
  
 class MyWidget(QMainWindow):
@@ -22,16 +22,44 @@ class MyWidget(QMainWindow):
 
         self.del_p.clicked.connect(self.delette_product_part)
         self.add_ex.clicked.connect(self.add_existing_part)
-        self.crt_new.clicked.connect(self.create_add_part)
+        self.crt_new.clicked.connect(self.create_add_part)'''
 
-        self.act.clicked.connect(self.product_act)'''
+        self.product_a.triggered.connect(self.create_prod)
 
-        self.load()
+        self.act.clicked.connect(self.product_upd)
+
+        self.load(1)
+
+    def create_prod(self):
+        post(URL + f'/api/product/0?title=ПРОДУКТ&r_coef=0.0&r_cost=1&w_cost=1')
+        product_id = get(URL + '/api/products?ids=all').json()['result']['products'][-1]['id']
+        self.ID.setText(str(product_id))
+        self.load(product_id)
+
+    def product_upd(self):
+        id = self.ID.text()
+
+        title = self.name.text()
+        r_coef = self.profitability.text()
+        if not r_coef:
+            r_coef = 0.0
+        
+        put(URL + f'/api/product/{id}?title={title}&r_coef={r_coef}')
+        get(URL + f'/api/productcost/{id}')
+
+        self.load(id)
     
-    def load(self):
-        response = get('http://' + DOMEN + '/api/product/1')
+    def load(self, p_id):
+        print(URL + f'/api/product/{p_id}')
+        response = get(URL + f'/api/product/{p_id}')
+        print(response)
         if not response:
+            self.create_prod()
             return
+
+        self.operations_list.clear()
+        self.additionals_list.clear()
+        self.parts_list.clear()
 
         product_info = response.json()['result']['product']
 
