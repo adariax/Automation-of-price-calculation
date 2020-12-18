@@ -23,7 +23,8 @@ class MaterialResource(Resource):
         if not material:
             return make_response(jsonify({'result': {'material': 'not found'}}), 404)
 
-        return make_response(jsonify({'result': {'material': material.to_dict()}}), 200)
+        return make_response(jsonify({'result': {'material': 
+                             material.to_dict(only=('id', 'title', 'price', 'waste_coef'))}}), 200)
 
     def delete(self, m_id):
         session = get_db_session()
@@ -81,10 +82,9 @@ class MaterialsResource(Resource):
 
         session = get_db_session()
         if args['ids'] == 'all':
-            return make_response(jsonify(
-                {'result': {'materials': [material.to_dict() 
-                for material in session.query(RawMaterial).all()]}}
-                ), 200)
+            return make_response(jsonify({'result': {'materials': 
+                                 [material.to_dict(only=('id', 'title', 'price', 'waste_coef')) 
+                                 for material in session.query(RawMaterial).all()]}}), 200)
 
         session = get_db_session()
         materials = []
@@ -95,8 +95,9 @@ class MaterialsResource(Resource):
         if not materials:
             return make_response(jsonify({'result': {'materials': 'not found'}}), 404)
 
-        return make_response(jsonify(
-            {'result': {'materials': [material.to_dict() for material in materials]}}), 200)
+        return make_response(jsonify({'result': {'materials': 
+                             [material.to_dict(only=('id', 'title', 'price', 'waste_coef')) 
+                             for material in materials]}}), 200)
 
     def delete(self):
         args = MaterialsResource.parser.parse_args()

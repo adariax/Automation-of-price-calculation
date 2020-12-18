@@ -6,24 +6,30 @@ from app.models import Part, RawMaterial, Operation
 
 
 def dict(part):
-    operations = []
+    operation_time = []
     session = get_db_session()
     for obj in part.operations:
-        operations.append(session.query(Operation).filter(Operation.id == obj.operation_id).first())
+        operation = session.query(Operation).filter(Operation.id == obj.operation_id).first()
+        time = obj.time
+        operation_time.append((operation, time))
     return {'id': part.id, 'title': part.title,
-            'material': {'id': part.material.id, 'title': part.material.title},
-            'operations': [{'id': operation.id, 
-                            'title': operation.title} for operation in operations]}
+            'material': {'id': part.material.id, 'title': part.material.title, 
+                         'count': part.material_count},
+            'operations': [{'id': info[0].id, 
+                            'title': info[0].title,
+                            'time': info[1]} for info in operation_time]}
 
 
 class PartResource(Resource):
     post_parser = reqparse.RequestParser()
     post_parser.add_argument('title', required=True)
     post_parser.add_argument('material_id', required=True, type=int)
+    post_parser.add_argument('material_count', required=True, type=int)
 
     put_parser = reqparse.RequestParser()
     put_parser.add_argument('title', required=False)
     put_parser.add_argument('material_id', required=False, type=int)
+    put_parser.add_argument('material_count', required=True, type=int)
 
     def get(self, p_id):
         session = get_db_session()
@@ -54,6 +60,7 @@ class PartResource(Resource):
         session = get_db_session()
         part = Part()
         part.title = args['title']
+        part.material_id = args['materual_count']
         if session.query(RawMaterial).filter(RawMaterial.id == args['material_id']).first():
             part.material_id = args['material_id']
         else:

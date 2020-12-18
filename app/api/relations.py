@@ -1,7 +1,7 @@
 from flask import request, jsonify, make_response, Blueprint
 
 from app import get_db_session
-from app.models import Operation, Part, Product, Additional
+from app.models import Operation, Part, Product, Additional, Machine, RawMaterial, Worker, Constant
 from app.models import AdditionalProduct, OperationPart, OperationProduct
 
 blueprint_relations = Blueprint('relations', __name__, template_folder='')
@@ -142,3 +142,65 @@ def additional_product():
     session.commit()
 
     return make_response(jsonify({'result': {'status': 'OK'}}), 200)
+
+
+@blueprint_relations.route('/api/productcost/<int:p_id>', methods=['GET'])
+def product_cost(p_id):
+    session = get_db_session()
+    product = session.query(Product).filter(Product.id == p_id).first()
+    if not product:
+        return make_response(jsonify({'result': {'error': 'bad id'}}), 400)
+
+    w_cost, s_cost, m_cost = 0, 0, 0
+
+    for part in product.parts:
+        material = session.query(RawMaterial).filter(RawMaterial.id == part.material_id).first()
+        m_cost += material.price * (part.material_count * (1 + material.waste_coef))
+        for obj in part.operations:
+            time = obj.time
+            operation = session.query(Operation).filter(Operation.id == obj.operation_id).first()
+
+            machine = session.query(Machine).filter(Machine.id == operation.machine_id).first()
+            s_cost += time * machine.price
+
+            worker = session.query(Worker).filter(Worker.id == machine.worker_id).first()
+            w_cost += time * worker.price
+    
+    for obj in product.operations:
+        time = obj.time
+        operation = session.query(Operation).filter(Operation.id == obj.operation_id).first()
+
+        machine = session.query(Machine).filter(Machine.id == operation.machine_id).first()
+        s_cost += time * machine.price
+
+        worker = session.query(Worker).filter(Worker.id == machine.worker_id).first()
+        w_cost += time * worker.price
+
+    for additional_info in product.additionals:
+        additional = session.query(Additional).filter(Additional.id == 
+                                                      additional_info.additional_id).first()
+        count = additional_info.count
+        m_cost += additional.price * count
+
+    
+    goe = session.query(Constant).filter(Constant.title == 'GOE').first().value
+    ge = session.query(Constant).filter(Constant.title == 'GE').first().value
+    ce = session.query(Constant).filter(Constant.title == 'CE').first().value
+    ip = session.query(Constant).filter(Constant.title == 'IP').first().value
+    pr = session.query(Constant).filter(Constant.title == 'PR').first().value
+    rc = session.query(Constant).filter(Constant.title == 'RC').first().value
+    ap = session.query(Constant).filter(Constant.title == 'AP').first().value
+    w = session.query(Constant).filter(Constant.title == 'w').first().value
+    vat = session.query(Constant).filter(Constant.title == 'VAT').first().value
+
+    w_cost = w_cost * ip * pr * rc * ap
+    ic = w_cost * (1 + goe) + m_cost + s_cost
+    c = ic + w_cost * ge + ic * ce
+
+    product.r_cost = (c * (1 + product.r_coef) * vat) / w
+    product.w_cost = product.r_cost * w
+
+    session.commit()
+
+    return make_response(jsonify({'result': {'status': 'OK',
+                                             'message': 'product was updated'}}), 200)

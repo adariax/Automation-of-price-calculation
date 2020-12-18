@@ -80,8 +80,7 @@ class Additional(db.Model, SerializerMixin):
 
 
 class Constant(db.Model, SerializerMixin):
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    title = db.Column(db.String, nullable=False)
+    title = db.Column(db.String, nullable=False, primary_key=True, unique=True)
     value = db.Column(db.Float, nullable=False)
 
 
@@ -91,6 +90,8 @@ class Part(db.Model, SerializerMixin):
 
     material_id = db.Column(db.Integer, db.ForeignKey('raw_material.id'), nullable=False)
     material = db.relationship('RawMaterial', backref=db.backref('parts', lazy=True))
+
+    material_count = db.Column(db.Integer, nullable=False)
 
 
 class Product(db.Model, SerializerMixin):

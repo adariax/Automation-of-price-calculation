@@ -6,22 +6,28 @@ from app.models import Product, Additional, Operation
 
 
 def dict(product):
-    operations, additionals = [], []
+    operation_time, additional_count = [], []
     session = get_db_session()
 
     for obj in product.operations:
-        operations.append(session.query(Operation).filter(Operation.id == obj.operation_id).first())
+        operation = session.query(Operation).filter(Operation.id == obj.operation_id).first()
+        time = obj.time
+        operation_time.append((operation, time))
 
     for obj in product.additionals:
-        additionals.append(session.query(Additional).filter(Additional.id == 
-                                                            obj.additional_id).first())
+        additional = session.query(Additional).filter(Additional.id == obj.additional_id).first()
+        count = obj.count
+        additional_count.append((additional, count))
 
-    return {'id': product.id, 'title': product.title,
+    return {'id': product.id, 'title': product.title, 'profitability': product.r_coef,
+            'retale cost': '%.2f' % product.r_cost, 'wholesale cost': '%.2f' % product.w_cost,
             'parts': [{'id': part.id, 'title': part.title} for part in product.parts],
-            'operations': [{'id': operation.id, 
-                            'title': operation.title} for operation in operations],
-            'additionals': [{'id': additional.id, 
-                            'title': additional.title} for additional in additionals]}
+            'operations': [{'id': info[0].id, 
+                            'title': info[0].title,
+                            'time': info[1]} for info in operation_time],
+            'additionals': [{'id': info[0].id, 
+                            'title': info[0].title,
+                            'count': info[1]} for info in additional_count]}
 
 
 class ProductResource(Resource):

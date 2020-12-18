@@ -21,7 +21,8 @@ class AdditionalResource(Resource):
         if not additional:
             return make_response(jsonify({'result': {'additional': 'not found'}}), 404)
 
-        return make_response(jsonify({'result': {'additional': additional.to_dict()}}), 200)
+        return make_response(jsonify({'result': {'additional': 
+                             additional.to_dict(only=('id', 'title', 'price'))}}), 200)
 
     def delete(self, a_id):
         session = get_db_session()
@@ -79,7 +80,7 @@ class AdditionalsResource(Resource):
         session = get_db_session()
         if args['ids'] == 'all':
             return make_response(jsonify(
-                {'result': {'additionals': [additional.to_dict() 
+                {'result': {'additionals': [additional.to_dict(only=('id', 'title', 'price')) 
                 for additional in session.query(Additional).all()]}}
                 ), 200)
 
@@ -92,8 +93,9 @@ class AdditionalsResource(Resource):
         if not additionals:
             return make_response(jsonify({'result': {'additionals': 'not found'}}), 404)
 
-        return make_response(jsonify(
-            {'result': {'additionals': [additional.to_dict() for additional in additionals]}}), 200)
+        return make_response(jsonify({'result': {'additionals': 
+                             [additional.to_dict(only=('id', 'title', 'price')) 
+                             for additional in additionals]}}), 200)
 
     def delete(self):
         args = AdditionalsResource.parser.parse_args()
