@@ -14,7 +14,7 @@ from info import URL
 class Application(QMainWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi('./ui/main.ui', self)
+        uic.loadUi('ui/main.ui', self)
 
         self.product_a.triggered.connect(self.create_prod)
         self.part_a.triggered.connect(self.create_part)
@@ -216,7 +216,5 @@ class Application(QMainWindow):
             self.parts_list.addItem(item)
 
 
-descktop_app = QApplication(sys.argv)
+desktop_app = QApplication(sys.argv)
 ex = Application()
-ex.show()
-sys.exit(descktop_app.exec_())

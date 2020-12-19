@@ -11,7 +11,7 @@ from info import URL
 class Operation(QDialog):
     def __init__(self, mode='a', o_id=1):
         super().__init__()
-        uic.loadUi('./ui/operation.ui', self)
+        uic.loadUi('ui/operation.ui', self)
         self.setWindowFlag(Qt.WindowContextHelpButtonHint, False)
 
         self.ok.clicked.connect(self.adding)
@@ -56,7 +56,7 @@ class Operation(QDialog):
 class Operations(QDialog):
     def __init__(self):
         super().__init__()
-        uic.loadUi('./ui/operations.ui', self)
+        uic.loadUi('ui/operations.ui', self)
         self.setWindowFlag(Qt.WindowContextHelpButtonHint, False)
 
         self.table.cellClicked.connect(self.row_focus)

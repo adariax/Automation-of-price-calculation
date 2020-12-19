@@ -23,7 +23,7 @@ class OperationResource(Resource):
 
         return make_response(jsonify({'result': {'operation': 
                              operation.to_dict(only=('id', 'title', 
-                             'machine.id', 'machine.title'))}}), 200)
+                                                     'machine.id', 'machine.title'))}}), 200)
 
     def delete(self, o_id):
         session = get_db_session()
@@ -91,7 +91,7 @@ class OperationsResource(Resource):
         if args['ids'] == 'all':
             return make_response(jsonify({'result': {'operations': 
                                  [operation.to_dict(only=('id', 'title', 
-                                 'machine.id', 'machine.title')) 
+                                                          'machine.id', 'machine.title'))
                                  for operation in session.query(Operation).all()]}}), 200)
 
         operations = []
@@ -104,7 +104,7 @@ class OperationsResource(Resource):
 
         return make_response(jsonify({'result': {'operations': 
                                      [operation.to_dict(only=('id', 'title', 
-                                     'machine.id', 'machine.title')) 
+                                                              'machine.id', 'machine.title'))
                                      for operation in operations]}}), 200)
 
     def delete(self):

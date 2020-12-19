@@ -25,7 +25,7 @@ class MachineResource(Resource):
 
         return make_response(jsonify({'result': {'machine': 
                              machine.to_dict(only=('id', 'title', 'price', 
-                             'worker.id', 'worker.title'))}}), 200)
+                                                   'worker.id', 'worker.title'))}}), 200)
 
     def delete(self, m_id):
         session = get_db_session()
@@ -94,7 +94,7 @@ class MachinesResource(Resource):
         if args['ids'] == 'all':
             return make_response(jsonify({'result': {'machines': 
                                  [machine.to_dict(only=('id', 'title', 'price', 
-                                 'worker.id', 'worker.title')) 
+                                                        'worker.id', 'worker.title'))
                                  for machine in session.query(Machine).all()]}}), 200)
 
         machines = []

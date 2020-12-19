@@ -179,7 +179,6 @@ def product_cost(p_id):
                                                       additional_info.additional_id).first()
         count = additional_info.count
         m_cost += additional.price * count
-
     
     goe = session.query(Constant).filter(Constant.title == 'GOE').first().value
     ge = session.query(Constant).filter(Constant.title == 'GE').first().value

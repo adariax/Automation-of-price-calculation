@@ -8,4 +8,4 @@ from adding import AddOperation, AddAdditional, AddPart
 
 from product import Product
 
-from part import Part, Parts
+from part import Part

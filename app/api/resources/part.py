@@ -24,12 +24,12 @@ class PartResource(Resource):
     post_parser = reqparse.RequestParser()
     post_parser.add_argument('title', required=True)
     post_parser.add_argument('material_id', required=True, type=int)
-    post_parser.add_argument('material_count', required=True, type=int)
+    post_parser.add_argument('material_count', required=True, type=float)
 
     put_parser = reqparse.RequestParser()
     put_parser.add_argument('title', required=False)
     put_parser.add_argument('material_id', required=False, type=int)
-    put_parser.add_argument('material_count', required=True, type=int)
+    put_parser.add_argument('material_count', required=True, type=float)
 
     def get(self, p_id):
         session = get_db_session()

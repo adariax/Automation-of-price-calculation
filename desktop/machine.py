@@ -11,7 +11,7 @@ from info import URL
 class Machine(QDialog):
     def __init__(self, mode='a', m_id=1):
         super().__init__()
-        uic.loadUi('./ui/machine.ui', self)
+        uic.loadUi('ui/machine.ui', self)
         self.setWindowFlag(Qt.WindowContextHelpButtonHint, False)
 
         self.ok.clicked.connect(self.adding)
@@ -58,7 +58,7 @@ class Machine(QDialog):
 class Machines(QDialog):
     def __init__(self):
         super().__init__()
-        uic.loadUi('./ui/machines.ui', self)
+        uic.loadUi('ui/machines.ui', self)
         self.setWindowFlag(Qt.WindowContextHelpButtonHint, False)
 
         self.table.cellClicked.connect(self.row_focus)

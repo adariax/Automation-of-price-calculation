@@ -11,7 +11,7 @@ from info import URL
 class AddOperation(QDialog):
     def __init__(self):
         super().__init__()
-        uic.loadUi('./ui/add_operation.ui', self)
+        uic.loadUi('ui/add_operation.ui', self)
         self.setWindowFlag(Qt.WindowContextHelpButtonHint, False)
         
         self.o_id = 0
@@ -36,25 +36,25 @@ class AddOperation(QDialog):
         operation_id = self.operations.currentData()
         time = self.time.value()
 
-        if operation_id == None or time == 0.0:
+        if not operation_id or time == 0.0:
             QMessageBox.warning(self, 'Ошибка', 'Зполнены не все поля!')
         else:
-           self.o_id = operation_id
-           self.o_title = self.operations.currentText()
-           self.o_time = time
+            self.o_id = operation_id
+            self.o_title = self.operations.currentText()
+            self.o_time = round(time / (60 * 60), 3)
 
-           self.close()
+            self.close()
 
 
 class AddAdditional(QDialog):
     def __init__(self):
         super().__init__()
-        uic.loadUi('./ui/add_additional.ui', self)
+        uic.loadUi('ui/add_additional.ui', self)
         self.setWindowFlag(Qt.WindowContextHelpButtonHint, False)
         
         self.a_id = 0
         self.a_title = 0
-        self.a_count = 0
+        self.a_count = 0.0
 
         self.ok.clicked.connect(self.adding)
         self.closing.clicked.connect(self.close)
@@ -74,20 +74,20 @@ class AddAdditional(QDialog):
         additional_id = self.additionals.currentData()
         count = self.count.value()
 
-        if additional_id == None or count == 0.0:
+        if not additional_id or count == 0.0:
             QMessageBox.warning(self, 'Ошибка', 'Зполнены не все поля!')
         else:
-           self.a_id = additional_id
-           self.a_title = self.additionals.currentText()
-           self.a_count = count
+            self.a_id = additional_id
+            self.a_title = self.additionals.currentText()
+            self.a_count = count
 
-           self.close()
+            self.close()
 
 
 class AddPart(QDialog):
     def __init__(self):
         super().__init__()
-        uic.loadUi('./ui/parts.ui', self)
+        uic.loadUi('ui/parts.ui', self)
         self.setWindowFlag(Qt.WindowContextHelpButtonHint, False)
         
         self.p_id = 0
@@ -97,7 +97,6 @@ class AddPart(QDialog):
         self.closing.clicked.connect(self.close)
 
         self.loading()
-
 
     def loading(self):
         self.parts.addItem('')
@@ -110,10 +109,10 @@ class AddPart(QDialog):
     def adding(self):
         part_id = self.parts.currentData()
 
-        if part_id == None:
+        if not part_id:
             QMessageBox.warning(self, 'Ошибка', 'Выберете деталь!')
         else:
-           self.p_id = part_id
-           self.p_title = self.parts.currentText()
+            self.p_id = part_id
+            self.p_title = self.parts.currentText()
 
-           self.close()
+            self.close()
