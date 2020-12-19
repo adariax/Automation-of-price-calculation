@@ -59,3 +59,10 @@ class Part(QDialog):
                 o_id, time = self.operations.item(indx).data(Qt.UserRole)
                 post(URL + f'/api/operationpart?operation_id={o_id}&part_id={part_id}&time={time}')
             self.close()
+
+
+class Parts(QDialog):
+    def __init__(self):
+        super().__init__()
+        uic.loadUi('./ui/part.ui', self)
+        self.setWindowFlag(Qt.WindowContextHelpButtonHint, False)

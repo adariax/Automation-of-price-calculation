@@ -61,10 +61,8 @@ def operation_product():
     op = session.query(OperationProduct).filter(OperationProduct.product_id == product_id,
                                                 OperationProduct.operation_id == operation_id
                                                 ).first()
-    print(operation_id, args)
     if request.method == 'POST': 
         if op:
-            print(op)
             return make_response(jsonify({'result': {'error': 'bad id'}}), 400)
 
         op = OperationProduct(operation_id=operation.id, product_id=product.id, time=time)

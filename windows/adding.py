@@ -45,3 +45,75 @@ class AddOperation(QDialog):
 
            self.close()
 
+
+class AddAdditional(QDialog):
+    def __init__(self):
+        super().__init__()
+        uic.loadUi('./ui/add_additional.ui', self)
+        self.setWindowFlag(Qt.WindowContextHelpButtonHint, False)
+        
+        self.a_id = 0
+        self.a_title = 0
+        self.a_count = 0
+
+        self.ok.clicked.connect(self.adding)
+        self.closing.clicked.connect(self.close)
+
+        self.loading()
+
+
+    def loading(self):
+        self.additionals.addItem('')
+
+        additionals = get(URL + f'/api/additionals?ids=all').json()['result']['additionals']
+        for indx, additional in enumerate(additionals):
+            self.additionals.addItem(additional['title'])
+            self.additionals.setItemData(indx + 1, additional['id'], Qt.UserRole)
+
+    def adding(self):
+        additional_id = self.additionals.currentData()
+        count = self.count.value()
+
+        if additional_id == None or count == 0.0:
+            QMessageBox.warning(self, 'Ошибка', 'Зполнены не все поля!')
+        else:
+           self.a_id = additional_id
+           self.a_title = self.additionals.currentText()
+           self.a_count = count
+
+           self.close()
+
+
+class AddPart(QDialog):
+    def __init__(self):
+        super().__init__()
+        uic.loadUi('./ui/parts.ui', self)
+        self.setWindowFlag(Qt.WindowContextHelpButtonHint, False)
+        
+        self.p_id = 0
+        self.p_title = 0
+
+        self.ok.clicked.connect(self.adding)
+        self.closing.clicked.connect(self.close)
+
+        self.loading()
+
+
+    def loading(self):
+        self.parts.addItem('')
+
+        parts = get(URL + f'/api/parts?ids=all').json()['result']['parts']
+        for indx, part in enumerate(parts):
+            self.parts.addItem(part['title'])
+            self.parts.setItemData(indx + 1, part['id'], Qt.UserRole)
+
+    def adding(self):
+        part_id = self.parts.currentData()
+
+        if part_id == None:
+            QMessageBox.warning(self, 'Ошибка', 'Выберете деталь!')
+        else:
+           self.p_id = part_id
+           self.p_title = self.parts.currentText()
+
+           self.close()
