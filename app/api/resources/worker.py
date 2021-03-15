@@ -23,7 +23,7 @@ class WorkerResource(Resource):
 
         return make_response(jsonify({'result': {'worker':
                              worker.to_dict(only=('id', 'title', 'price',
-                             'machines.id', 'machines.title'))}}), 200)
+                                                  'machines.id', 'machines.title'))}}), 200)
 
     def delete(self, w_id):
         session = get_db_session()

@@ -91,7 +91,7 @@ class Part(db.Model, SerializerMixin):
     material_id = db.Column(db.Integer, db.ForeignKey('raw_material.id'), nullable=False)
     material = db.relationship('RawMaterial', backref=db.backref('parts', lazy=True))
 
-    material_count = db.Column(db.Integer, nullable=False)
+    material_count = db.Column(db.Float, nullable=False)
 
 
 class Product(db.Model, SerializerMixin):

@@ -26,8 +26,7 @@ def dict(product):
                             'title': info[0].title,
                             'time': info[1]} for info in operation_time],
             'additionals': [{'id': info[0].id, 
-                            'title': info[0].title,
-                            'count': info[1]} for info in additional_count]}
+                            'title': info[0].title, 'count': info[1]} for info in additional_count]}
 
 
 class ProductResource(Resource):
