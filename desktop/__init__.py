@@ -1,4 +1,4 @@
-URL = 'http://127.0.0.1:5000'
+URL = open('./data/URL.txt', 'r').readline()
 UI_PATH = 'data/ui/'
 
 from .widgets import *

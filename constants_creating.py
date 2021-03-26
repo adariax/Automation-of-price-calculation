@@ -10,7 +10,7 @@ def constants_into_db():
         return
     
     constants = []
-    with open('data/constants.txt', 'r') as f:
+    with open('constants.txt', 'r') as f:
         line = f.readline()
         while line != '':
             constants.append(tuple(line.split('==')))
