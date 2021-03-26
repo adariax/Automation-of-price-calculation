@@ -4,17 +4,15 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow
 from PyQt5.QtWidgets import QListWidgetItem
 
-from widgets import *
+from desktop import *
 
 from requests import get, put, post, delete
-
-from info import URL
 
  
 class Application(QMainWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi('ui/main.ui', self)
+        uic.loadUi(UI_PATH + 'main.ui', self)
 
         self.product_a.triggered.connect(self.create_prod)
         self.part_a.triggered.connect(self.create_part)
@@ -214,7 +212,3 @@ class Application(QMainWindow):
             item = QListWidgetItem(part['title'])
             item.setData(Qt.UserRole, part['id'])
             self.parts_list.addItem(item)
-
-
-desktop_app = QApplication(sys.argv)
-ex = Application()

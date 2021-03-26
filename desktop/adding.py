@@ -5,13 +5,14 @@ from PyQt5.QtWidgets import QListWidgetItem
 
 from requests import get, put, post
 
-from info import URL
+from desktop import URL, UI_PATH
 
  
 class AddOperation(QDialog):
     def __init__(self):
         super().__init__()
-        uic.loadUi('ui/add_operation.ui', self)
+        uic.loadUi(UI_PATH + 'add_operation.ui', self)
+        
         self.setWindowFlag(Qt.WindowContextHelpButtonHint, False)
         
         self.o_id = 0
@@ -49,7 +50,8 @@ class AddOperation(QDialog):
 class AddAdditional(QDialog):
     def __init__(self):
         super().__init__()
-        uic.loadUi('ui/add_additional.ui', self)
+        uic.loadUi(UI_PATH + 'add_additional.ui', self)
+
         self.setWindowFlag(Qt.WindowContextHelpButtonHint, False)
         
         self.a_id = 0
@@ -87,7 +89,8 @@ class AddAdditional(QDialog):
 class AddPart(QDialog):
     def __init__(self):
         super().__init__()
-        uic.loadUi('ui/parts.ui', self)
+        uic.loadUi(UI_PATH + 'parts.ui', self)
+
         self.setWindowFlag(Qt.WindowContextHelpButtonHint, False)
         
         self.p_id = 0

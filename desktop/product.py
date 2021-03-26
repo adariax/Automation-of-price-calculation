@@ -4,13 +4,14 @@ from PyQt5.QtWidgets import QMessageBox, QDialog
 
 from requests import get
 
-from info import URL
+from desktop import URL, UI_PATH
 
  
 class Product(QDialog):
     def __init__(self):
         super().__init__()
-        uic.loadUi('ui/product.ui', self)
+        uic.loadUi(UI_PATH + 'product.ui', self)
+
         self.setWindowFlag(Qt.WindowContextHelpButtonHint, False)
         
         self.p_id = 0

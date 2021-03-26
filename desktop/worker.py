@@ -5,13 +5,14 @@ from PyQt5.QtWidgets import QTableWidgetItem
 
 from requests import get, put, post
 
-from info import URL
+from desktop import URL, UI_PATH
 
  
 class Worker(QDialog):
     def __init__(self, mode='a', w_id=1):
         super().__init__()
-        uic.loadUi('ui/worker.ui', self)
+        uic.loadUi(UI_PATH + 'worker.ui', self)
+
         self.setWindowFlag(Qt.WindowContextHelpButtonHint, False)
 
         self.ok.clicked.connect(self.adding)
@@ -47,7 +48,8 @@ class Worker(QDialog):
 class Workers(QDialog):
     def __init__(self):
         super().__init__()
-        uic.loadUi('ui/workers.ui', self)
+        uic.loadUi(UI_PATH + 'workers.ui', self)
+        
         self.setWindowFlag(Qt.WindowContextHelpButtonHint, False)
 
         self.table.cellClicked.connect(self.row_focus)
@@ -72,6 +74,10 @@ class Workers(QDialog):
 
     def load(self):
         workers = get(URL + f'/api/workers?ids=all').json()['result']['workers']
+
+        if not workers:
+            QMessageBox.warning(self, 'Внимание', 'Рабочих нет')
+            return
 
         self.fields = len(workers[0].keys()) - 2
 

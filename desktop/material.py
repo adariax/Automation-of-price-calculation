@@ -5,13 +5,14 @@ from PyQt5.QtWidgets import QTableWidgetItem
 
 from requests import get, put, post
 
-from info import URL
+from desktop import URL, UI_PATH
 
  
 class Material(QDialog):
     def __init__(self, mode='a', m_id=1):
         super().__init__()
-        uic.loadUi('ui/material.ui', self)
+        uic.loadUi(UI_PATH + '/material.ui', self)
+
         self.setWindowFlag(Qt.WindowContextHelpButtonHint, False)
 
         self.ok.clicked.connect(self.adding)
@@ -49,7 +50,8 @@ class Material(QDialog):
 class Materials(QDialog):
     def __init__(self):
         super().__init__()
-        uic.loadUi('ui/materials.ui', self)
+        uic.loadUi(UI_PATH + 'materials.ui', self)
+        
         self.setWindowFlag(Qt.WindowContextHelpButtonHint, False)
 
         self.table.cellClicked.connect(self.row_focus)
@@ -74,6 +76,10 @@ class Materials(QDialog):
 
     def load(self):
         materials = get(URL + f'/api/materials?ids=all').json()['result']['materials']
+
+        if not materials:
+            QMessageBox.warning(self, 'Внимание', 'Материалов нет')
+            return
 
         self.fields = len(materials[0].keys()) - 1
 

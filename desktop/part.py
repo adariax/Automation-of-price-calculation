@@ -3,17 +3,18 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QMessageBox, QDialog
 from PyQt5.QtWidgets import QListWidgetItem
 
-from widgets import AddOperation
+from .adding import AddOperation
 
 from requests import get, put, post
 
-from info import URL
+from desktop import URL, UI_PATH
 
  
 class Part(QDialog):
     def __init__(self):
         super().__init__()
-        uic.loadUi('ui/part.ui', self)
+        uic.loadUi(UI_PATH + 'part.ui', self)
+
         self.setWindowFlag(Qt.WindowContextHelpButtonHint, False)
 
         self.ok.clicked.connect(self.adding)

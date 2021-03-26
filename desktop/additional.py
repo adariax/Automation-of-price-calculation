@@ -5,13 +5,14 @@ from PyQt5.QtWidgets import QTableWidgetItem
 
 from requests import get, put, post
 
-from info import URL
+from desktop import URL, UI_PATH
 
  
 class Additional(QDialog):
     def __init__(self, mode='a', a_id=1):
         super().__init__()
-        uic.loadUi('ui/additional.ui', self)
+        uic.loadUi(UI_PATH + 'additional.ui', self)
+        
         self.setWindowFlag(Qt.WindowContextHelpButtonHint, False)
 
         self.ok.clicked.connect(self.adding)
@@ -47,7 +48,8 @@ class Additional(QDialog):
 class Additionals(QDialog):
     def __init__(self):
         super().__init__()
-        uic.loadUi('ui/additionals.ui', self)
+        uic.loadUi(UI_PATH + 'additionals.ui', self)
+        
         self.setWindowFlag(Qt.WindowContextHelpButtonHint, False)
 
         self.table.cellClicked.connect(self.row_focus)
@@ -72,6 +74,10 @@ class Additionals(QDialog):
 
     def load(self):
         additionals = get(URL + f'/api/additionals?ids=all').json()['result']['additionals']
+
+        if not additionals:
+            QMessageBox.warning(self, 'Внимание', 'Доп. комплектующих нет')
+            return
 
         self.fields = len(additionals[0].keys()) - 1
 

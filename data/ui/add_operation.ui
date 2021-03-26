@@ -94,6 +94,9 @@
        <pointsize>14</pointsize>
       </font>
      </property>
+     <property name="maximum">
+      <number>999</number>
+     </property>
     </widget>
    </item>
   </layout>
